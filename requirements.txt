@@ -8,5 +8,6 @@ chardet==3.0.4
 idna==2.10
 multidict==5.0.2
 pytz==2020.4
+tweepy==3.9.0
 typing-extensions==3.7.4.3
 yarl==1.6.3
