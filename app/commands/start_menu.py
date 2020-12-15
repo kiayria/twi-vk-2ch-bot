@@ -13,16 +13,6 @@ async def cmd_start(message, state):
     )
 
 
-@dp.callback_query_handler(text='twi_btn', state='*')
-async def twi_menu(query, state):
-    await query.answer()
-    await Form.twitter.set()
-    await query.message.edit_text(
-        text='Функции твиттера',
-        reply_markup=get_twi_markup()
-    )
-
-
 @dp.callback_query_handler(text='return', state='*')
 async def start_menu(query, state):
     await query.answer()
@@ -30,6 +20,6 @@ async def start_menu(query, state):
         reply_markup=get_start_markup())
 
 
-@dp.message_handler(content_types=types.ContentTypes.ANY, state='*')
-async def unknown_command(message):
-    await message.reply('Эта команда мне неизвестна.')
+# @dp.message_handler(content_types=types.ContentTypes.ANY, state='*')
+# async def unknown_command(message):
+#     await message.reply('Эта команда мне неизвестна.')
