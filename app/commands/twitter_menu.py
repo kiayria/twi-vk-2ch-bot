@@ -88,7 +88,7 @@ async def twi_news(query, state):
 
 
 @dp.callback_query_handler(text='twi_stream', state='*')
-async def twi_tweet(query, state):
+async def twi_stream(query, state):
     await TwitterForm.stream.set()
     await query.answer()
     await query.message.edit_text(
@@ -98,7 +98,7 @@ async def twi_tweet(query, state):
 
 
 @dp.callback_query_handler(text='twi_news', state='*')
-async def twi_news(query, state):
+async def process_stream(query, state):
     await TwitterForm.news.set()
     await query.answer()
     await query.message.edit_text(
