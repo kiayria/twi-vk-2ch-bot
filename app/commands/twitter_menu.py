@@ -1,7 +1,7 @@
 import tweepy
 from aiogram import types
 
-from app import dp, bot, twitter_auth
+from app import dp, bot, api, twitter_auth
 from app.MyListener import MyStreamListener
 from app.utils.keyboards import get_twi_markup
 from app.utils.states import TwitterForm
@@ -50,10 +50,7 @@ async def process_tweet(message, state):
     async with state.proxy() as data:
         # api = data['api']
         # api.update_status(str(message.text))
-        twitter_auth.set_access_token("",
-                                      "")
-        # Create API object
-        api = tweepy.API(twitter_auth)
+
         # Create a tweet
         if len(message.text) < 140:
             api.update_status(message.text)
@@ -76,10 +73,6 @@ async def twi_news(query, state):
     await query.message.edit_text(
         text='Секундочку... Откапываем твиты...',
     )
-    twitter_auth.set_access_token("",
-                                  "")
-    # Create API object
-    api = tweepy.API(twitter_auth)
     timeline = api.home_timeline()
     txt = "Мы нашли эти твиты:\n"
     for tweet in timeline:
@@ -97,21 +90,29 @@ async def twi_stream(query, state):
     )
 
 
-@dp.callback_query_handler(text='twi_news', state='*')
-async def process_stream(query, state):
-    await TwitterForm.news.set()
-    await query.answer()
-    await query.message.edit_text(
-        text='Секундочку... Запускаем стрим...',
+@dp.callback_query_handler(text='twi_stream_off', state=TwitterForm.stream)
+async def twi_stream(query, state):
+    with state.proxy() as data:
+        stream = data.pop('stream', None)
+        if stream is None:
+            return
+        stream.disconnect()
+    await state.finish()
+
+
+@dp.message_handler(state=TwitterForm.stream)
+async def process_stream(message, state):
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text='Секундочку... Запускаем стрим...'
     )
-    twitter_auth.set_access_token("",
-                                  "")
-    # Create API object
-    api = tweepy.API(twitter_auth, wait_on_rate_limit=True,
-                     wait_on_rate_limit_notify=True)
 
-    tweets_listener = MyStreamListener(api)
+    tweets_listener = MyStreamListener(
+        api=api,
+        bot=bot,
+        chat_id=message.chat.id
+    )
     stream = tweepy.Stream(api.auth, tweets_listener)
-    txt = stream.filter(track=["Cyberpunk2077"], languages=["en"])
-
-    await bot.send_message(query.from_user.id, txt, reply_markup=get_twi_markup())
+    stream.filter(track=["Cyberpunk2077"], languages=["en"], is_async=True)
+    async with state.proxy() as data:
+        data['stream'] = stream
