@@ -10,3 +10,10 @@ TWITTER_BUTTONS = (
     (('Выйти', 'twi_logout'),),
     (('Назад', 'return'),),
 )
+
+VK_BUTTONS = (
+    (('Войти', 'vk_login'),),
+    (('Новый пост', 'vk_post'), ('Лента', 'vk_news')),
+    (('Выйти', 'vk_logout'),),
+    (('Назад', 'return'),),
+)

@@ -3,7 +3,7 @@ from aiogram import types
 
 from app import dp, bot, api, twitter_auth
 from app.MyListener import MyStreamListener
-from app.utils.keyboards import get_twi_markup
+from app.utils.keyboards import get_twi_markup, get_start_markup
 from app.utils.states import TwitterForm
 
 
@@ -84,10 +84,8 @@ async def twi_news(query, state):
 async def twi_stream(query, state):
     await TwitterForm.stream.set()
     await query.answer()
-    await query.message.edit_text(
-        text='Что будем искать?',
-        reply_markup=get_twi_markup()
-    )
+    txt = "Что будем искать?"
+    await bot.send_message(query.from_user.id, txt, reply_markup=get_twi_markup())
 
 
 @dp.callback_query_handler(text='twi_stream_off', state=TwitterForm.stream)
@@ -114,6 +112,15 @@ async def process_stream(message, state):
         chat_id=message.chat.id
     )
     stream = tweepy.Stream(api.auth, tweets_listener)
-    stream.filter(track=tags, languages=["en"], is_async=True)
+    stream.filter(track=tags, languages=["en", "ru"], is_async=True)
     async with state.proxy() as data:
         data['stream'] = stream
+
+
+@dp.callback_query_handler(text='return', state='*')
+async def go_back_to_menu(query, state):
+    await query.answer()
+    await query.message.edit_text(
+        text='Мы сделали шаг назад...',
+        reply_markup=get_start_markup()
+    )

@@ -10,7 +10,7 @@ class MyStreamListener(tweepy.StreamListener):
 
     def on_status(self, tweet):
         print(f"{tweet.user.name}:{tweet.text}")
-        await self.bot.send_message(
+        self.bot.send_message(
             chat_id=self.chat_id,
             text=tweet
         )
