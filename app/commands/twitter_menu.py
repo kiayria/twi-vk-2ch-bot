@@ -106,6 +106,7 @@ async def process_stream(message, state):
         chat_id=message.chat.id,
         text='Секундочку... Запускаем стрим...'
     )
+    tags = str(message.text).split(' ')
 
     tweets_listener = MyStreamListener(
         api=api,
@@ -113,6 +114,6 @@ async def process_stream(message, state):
         chat_id=message.chat.id
     )
     stream = tweepy.Stream(api.auth, tweets_listener)
-    stream.filter(track=["Cyberpunk2077"], languages=["en"], is_async=True)
+    stream.filter(track=tags, languages=["en"], is_async=True)
     async with state.proxy() as data:
         data['stream'] = stream
