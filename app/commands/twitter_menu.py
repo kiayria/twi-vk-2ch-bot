@@ -8,7 +8,6 @@ from app.utils.states import TwitterForm
 @dp.callback_query_handler(text='twi_btn', state='*')
 async def twi_menu(query, state):
     await query.answer()
-    await Form.twitter.set()
     await query.message.edit_text(
         text='Функции твиттера',
         reply_markup=get_twi_markup()
@@ -27,11 +26,10 @@ async def twi_login(query, state):
 
 @dp.callback_query_handler(text='twi_tweet', state='*')
 async def twi_tweet(query, state):
-
-    user_text = str(query.data).replace('twi_tweet', '')
-    await query.answer(text=user_text)
+    await TwitterForm.tweet.set()
+    await query.answer()
     await query.message.edit_text(
-        text='Here are twitter functions',
+        text='Введите текст сообщения',
         reply_markup=get_twi_markup()
     )
 
@@ -48,8 +46,8 @@ async def cmd_start(message, state):
 @dp.message_handler(state=TwitterForm.tweet)
 async def process_tweet(message, state):
     async with state.proxy() as data:
-        api = data['api']
-        api.update_status(str(message.text))
+        # api = data['api']
+        # api.update_status(str(message.text))
 
         await message.answer(
             text='Твит отправлен',
