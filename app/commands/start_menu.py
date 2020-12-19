@@ -1,23 +1,21 @@
-from aiogram import types
-
-from app import dp, Form
-from app.utils.keyboards import get_start_markup, get_twi_markup
+from . import CHOOSING
+from app.utils.keyboards import get_start_markup
 
 
-@dp.message_handler(commands='start', state='*')
-async def cmd_start(message, state):
-    await state.finish()
-    await message.answer(
+def start_menu(update, context):
+    update.message.reply_text(
         text='Hi there! Let`s waste some time.',
         reply_markup=get_start_markup()
     )
 
+    return CHOOSING
 
-@dp.callback_query_handler(text='return', state='*')
-async def start_menu(query, state):
-    await query.answer()
-    await query.message.edit_text(
-        reply_markup=get_start_markup())
+
+# @dp.callback_query_handler(text='return', state='*')
+# async def start_menu(query, state):
+#     await query.answer()
+#     await query.message.edit_text(
+#         reply_markup=get_start_markup())
 
 
 # @dp.message_handler(content_types=types.ContentTypes.ANY, state='*')

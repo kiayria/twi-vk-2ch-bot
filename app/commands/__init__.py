@@ -1,0 +1,1 @@
+CHOOSING, TWITTER, VK, DVACH = range(4)
