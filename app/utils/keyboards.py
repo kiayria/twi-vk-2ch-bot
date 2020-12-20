@@ -2,15 +2,21 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from app.utils.buttons import (
     START_BUTTONS,
-    TWITTER_BUTTONS, VK_BUTTONS
+    TWITTER_BUTTONS,
+    TWITTER_STREAM_BUTTONS,
+    VK_BUTTONS
 )
 
 
-def get_start_markup():
-    keyboard = [[InlineKeyboardButton(text, callback_data=data) for text, data in line] for line in START_BUTTONS]
-    start_kb = InlineKeyboardMarkup(keyboard)
+def get_markup(buttons):
+    keyboard = [[InlineKeyboardButton(text, callback_data=data) for text, data in line] for line in buttons]
+    kb = InlineKeyboardMarkup(keyboard)
 
-    return start_kb
+    return kb
+
+
+def get_start_markup():
+    return get_markup(START_BUTTONS)
 
 
 # def get_hidden_markup():
@@ -25,14 +31,12 @@ def get_start_markup():
 
 
 def get_twi_markup():
-    keyboard = [[InlineKeyboardButton(text, callback_data=data) for text, data in line] for line in TWITTER_BUTTONS]
-    twi_kb = InlineKeyboardMarkup(keyboard)
+    return get_markup(TWITTER_BUTTONS)
 
-    return twi_kb
+
+def get_twi_stream_markup():
+    return get_markup(TWITTER_STREAM_BUTTONS)
 
 
 def get_vk_markup():
-    keyboard = [[InlineKeyboardButton(text, callback_data=data) for text, data in line] for line in VK_BUTTONS]
-    vk_kb = InlineKeyboardMarkup(keyboard)
-
-    return vk_kb
+    return get_markup(VK_BUTTONS)

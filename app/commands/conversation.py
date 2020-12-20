@@ -16,8 +16,25 @@ from . import (
     DVACH
 )
 from .start_menu import start_menu
-from .twitter_menu import twi_menu, twi_login, twi_tweet, twi_news, twi_stream
-from .vk_menu import vk_menu, vk_login, vk_logout, vk_post, vk_change_status, process_status, process_post
+from .twitter_menu import (
+    twi_menu,
+    twi_login,
+    twi_tweet,
+    twi_news,
+    twi_stream,
+    twi_stream_off,
+    process_tweet,
+    process_stream
+)
+from .vk_menu import (
+    vk_menu,
+    vk_login,
+    vk_logout,
+    vk_post,
+    vk_change_status,
+    process_status,
+    process_post
+)
 
 
 def get_conversation():
@@ -35,10 +52,11 @@ def get_conversation():
                 CallbackQueryHandler(twi_stream, pattern='^twi_stream$'),
             ],
             TWITTER_TWEET: [
-
+                MessageHandler(Filters.text, process_tweet)
             ],
             TWITTER_STREAM: [
-
+                MessageHandler(Filters.text, process_stream),
+                CallbackQueryHandler(twi_stream_off, pattern='^twi_stream_off$'),
             ],
             VK_DEFAULT: [
                 CallbackQueryHandler(vk_login, pattern='^vk_login$'),

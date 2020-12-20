@@ -1,4 +1,5 @@
 import tweepy
+from app.utils.keyboards import get_twi_stream_markup
 
 
 class MyStreamListener(tweepy.StreamListener):
@@ -9,10 +10,12 @@ class MyStreamListener(tweepy.StreamListener):
         self.me = api.me()
 
     def on_status(self, tweet):
+        tweet_text = f'{tweet.user.name}:{tweet.text}'
         print(f"{tweet.user.name}:{tweet.text}")
         self.bot.send_message(
             chat_id=self.chat_id,
-            text=tweet
+            text=tweet_text,
+            reply_markup=get_twi_stream_markup()
         )
 
     def on_error(self, status):
