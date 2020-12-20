@@ -3,7 +3,7 @@ import tweepy
 from app.MyListener import MyStreamListener
 from app import twitter_auth
 from app.utils.keyboards import get_twi_markup
-from . import TWITTER_DEFAULT, TWITTER_TWEET
+from . import TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM
 
 
 def twi_menu(update, context):
@@ -54,8 +54,37 @@ def process_tweet(update, context):
 
 
 def twi_news(update, context):
+    query = update.callback_query
+    query.answer()
+
+    query.edit_message_text(
+        text="Секундочку... Откапываем твиты...",
+        reply_markup=get_twi_markup()
+    )
+    timeline = api.home_timeline()
+    txt = "Мы нашли эти твиты:\n"
+    for tweet in timeline:
+        txt += f"{tweet.user.name} говорит:\n {tweet.text}\n * * * * * * * * *\n\n\n"
+    job = context.job
+    context.bot.send_message(job.context, text=txt, reply_markup=get_twi_markup())
+    return TWITTER_DEFAULT
 
 
+def twi_stream(update, context):
+    query = update.callback_query
+    query.answer()
+
+    query.edit_message_text(
+        text="Что будем искать?",
+        reply_markup=get_twi_markup()
+    )
+    return TWITTER_STREAM
+
+
+def process_stream(update, context):
+    text = update.message.text
+    # streaming
+    return TWITTER_DEFAULT
 #
 #
 # @dp.callback_query_handler(text='twi_news', state='*')
