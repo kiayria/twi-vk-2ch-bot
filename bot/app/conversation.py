@@ -1,8 +1,40 @@
-from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, CallbackQueryHandler
-from . import CHOOSING, TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM, VK_DEFAULT, VK_POST, VK_STATUS, DVACH
-from .start_menu import start_menu
-from .twitter_menu import twi_menu, twi_login, twi_tweet, twi_news, twi_stream
-from .vk_menu import vk_menu, vk_login, vk_logout, vk_post, vk_change_status
+from telegram.ext import (
+    ConversationHandler,
+    CommandHandler,
+    MessageHandler,
+    CallbackQueryHandler,
+    Filters
+)
+from app.utils.states import (
+    CHOOSING,
+    TWITTER_DEFAULT,
+    TWITTER_TWEET,
+    TWITTER_STREAM,
+    VK_DEFAULT,
+    VK_POST,
+    VK_STATUS,
+    DVACH
+)
+from app.start_menu import start_menu
+from app.twitter.commands import (
+    twi_menu,
+    twi_login,
+    twi_tweet,
+    twi_news,
+    twi_stream,
+    twi_stream_off,
+    process_tweet,
+    process_stream
+)
+from app.vk.commands import (
+    vk_menu,
+    vk_login,
+    vk_logout,
+    vk_post,
+    vk_change_status,
+    process_status,
+    process_post
+)
 
 
 def get_conversation():
@@ -19,6 +51,13 @@ def get_conversation():
                 CallbackQueryHandler(twi_news, pattern='^twi_news$'),
                 CallbackQueryHandler(twi_stream, pattern='^twi_stream$'),
             ],
+            TWITTER_TWEET: [
+                MessageHandler(Filters.text, process_tweet)
+            ],
+            TWITTER_STREAM: [
+                MessageHandler(Filters.text, process_stream),
+                CallbackQueryHandler(twi_stream_off, pattern='^twi_stream_off$'),
+            ],
             VK_DEFAULT: [
                 CallbackQueryHandler(vk_login, pattern='^vk_login$'),
                 CallbackQueryHandler(vk_post, pattern='^vk_post$'),
@@ -26,10 +65,10 @@ def get_conversation():
                 CallbackQueryHandler(vk_logout, pattern='^vk_logout$'),
             ],
             VK_POST: [
-
+                MessageHandler(Filters.text, process_post)
             ],
             VK_STATUS: [
-
+                MessageHandler(Filters.text, process_status)
             ],
             DVACH: []
         },

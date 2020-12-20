@@ -1,4 +1,4 @@
-from . import CHOOSING
+from app.utils.states import CHOOSING
 from app.utils.keyboards import get_start_markup
 
 
