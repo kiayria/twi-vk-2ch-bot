@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  bot:
+    build: ./bot
+    restart: always
+    network_mode: bridge
+    links:
+      - mongodb
+    env_file: .env
+
+  mongodb:
+    restart: always
+    image: mongo:latest
+    network_mode: bridge
+    env_file: .env
+    volumes:
+    - ./mongo/data/db:/data/db
+    ports:
+    - "27017:27017"
