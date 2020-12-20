@@ -1,7 +1,7 @@
 import tweepy
 
 from app.MyListener import MyStreamListener
-from app import twitter_auth
+from app import api, twitter_auth
 from app.utils.keyboards import get_twi_markup
 from . import TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM
 
@@ -9,6 +9,7 @@ from . import TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM
 def twi_menu(update, context):
     query = update.callback_query
     query.answer()
+
     query.edit_message_text(
         text='Функции твиттера',
         reply_markup=get_twi_markup()
@@ -21,8 +22,17 @@ def twi_login(update, context):
     query = update.callback_query
     query.answer()
 
-    job = context.job
-    context.bot.send_message(job.context, text=str(twitter_auth.get_authorization_url()))
+    query.edit_message_text(
+        text='Войдите в аккаунт по ссылке',
+        reply_markup=get_twi_markup()
+    )
+
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=str(twitter_auth.get_authorization_url())
+    )
+
+    return TWITTER_DEFAULT
 
 
 def twi_tweet(update, context):
@@ -65,8 +75,11 @@ def twi_news(update, context):
     txt = "Мы нашли эти твиты:\n"
     for tweet in timeline:
         txt += f"{tweet.user.name} говорит:\n {tweet.text}\n * * * * * * * * *\n\n\n"
-    job = context.job
-    context.bot.send_message(job.context, text=txt, reply_markup=get_twi_markup())
+
+    context.bot.send_message(
+        update.effective_chat.id,
+        text=txt
+    )
     return TWITTER_DEFAULT
 
 
@@ -81,26 +94,34 @@ def twi_stream(update, context):
     return TWITTER_STREAM
 
 
+def twi_stream_off(update, context):
+    stream = context.user_data.pop('stream', None)
+    if stream is None:
+        return
+
+    stream.disconnect()
+
+    return TWITTER_DEFAULT
+
+
 def process_stream(update, context):
     text = update.message.text
-    # streaming
-    return TWITTER_DEFAULT
-#
-#
-# @dp.callback_query_handler(text='twi_news', state='*')
-# async def twi_news(query, state):
-#     await TwitterForm.news.set()
-#     await query.answer()
-#     await query.message.edit_text(
-#         text='Секундочку... Откапываем твиты...',
-#     )
-#     timeline = api.home_timeline()
-#     txt = "Мы нашли эти твиты:\n"
-#     for tweet in timeline:
-#         txt += f"{tweet.user.name} говорит:\n {tweet.text}\n * * * * * * * * *\n\n\n"
-#     await bot.send_message(query.from_user.id, txt, reply_markup=get_twi_markup())
-#
-#
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text='Секундочку... Запускаем стрим...'
+    )
+    tags = str(text).split(' ')
+
+    tweets_listener = MyStreamListener(
+        api=api,
+        bot=update.bot,
+        chat_id=update.effective_chat.id
+    )
+    stream = tweepy.Stream(api.auth, tweets_listener)
+    stream.filter(track=tags, languages=["en", "ru"], is_async=True)
+
+    return TWITTER_STREAM
+
 # @dp.callback_query_handler(text='twi_stream', state='*')
 # async def twi_stream(query, state):
 #     await TwitterForm.stream.set()

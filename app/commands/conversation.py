@@ -20,7 +20,7 @@ def get_conversation():
             VK: [],
             DVACH: []
         },
-        fallbacks=[]
+        fallbacks=[],
     )
 
     return conv
