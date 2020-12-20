@@ -1,9 +1,9 @@
 import tweepy
 
-from app.MyListener import MyStreamListener
+from app.twitter.MyStreamListener import MyStreamListener
 from app import api, twitter_auth
-from app.utils.keyboards import get_twi_markup, get_twi_stream_markup
-from . import TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM
+from app.twitter.utils.keyboards import get_twi_markup, get_twi_stream_markup
+from app.utils.states import TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM
 
 
 def twi_menu(update, context):

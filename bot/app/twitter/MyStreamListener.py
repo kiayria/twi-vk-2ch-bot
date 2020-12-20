@@ -1,5 +1,5 @@
 import tweepy
-from app.utils.keyboards import get_twi_stream_markup
+from app.twitter.utils.keyboards import get_twi_stream_markup
 
 
 class MyStreamListener(tweepy.StreamListener):

@@ -5,7 +5,7 @@ from telegram.ext import (
     CallbackQueryHandler,
     Filters
 )
-from . import (
+from app.utils.states import (
     CHOOSING,
     TWITTER_DEFAULT,
     TWITTER_TWEET,
@@ -15,8 +15,8 @@ from . import (
     VK_STATUS,
     DVACH
 )
-from .start_menu import start_menu
-from .twitter_menu import (
+from app.start_menu import start_menu
+from app.twitter.commands import (
     twi_menu,
     twi_login,
     twi_tweet,
@@ -26,7 +26,7 @@ from .twitter_menu import (
     process_tweet,
     process_stream
 )
-from .vk_menu import (
+from app.vk.commands import (
     vk_menu,
     vk_login,
     vk_logout,
