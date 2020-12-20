@@ -13,15 +13,15 @@ def get_start_markup():
     return start_kb
 
 
-def get_hidden_markup():
-    hidden_kb = InlineKeyboardMarkup().add(
-        InlineKeyboardButton(
-            'Развернуть',
-            callback_data='expand'
-        )
-    )
-
-    return hidden_kb
+# def get_hidden_markup():
+#     hidden_kb = InlineKeyboardMarkup().add(
+#         InlineKeyboardButton(
+#             'Развернуть',
+#             callback_data='expand'
+#         )
+#     )
+#
+#     return hidden_kb
 
 
 def get_twi_markup():
@@ -32,9 +32,7 @@ def get_twi_markup():
 
 
 def get_vk_markup():
-    vk_kb = InlineKeyboardMarkup(row_width=2)
-    for line in VK_BUTTONS:
-        buttons = (InlineKeyboardButton(text, callback_data=data) for text, data in line)
-        vk_kb.row(*buttons)
+    keyboard = [[InlineKeyboardButton(text, callback_data=data) for text, data in line] for line in VK_BUTTONS]
+    vk_kb = InlineKeyboardMarkup(keyboard)
 
     return vk_kb
