@@ -1,4 +1,4 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from app.utils.buttons import (
     START_BUTTONS,
@@ -7,38 +7,32 @@ from app.utils.buttons import (
 
 
 def get_start_markup():
-    start_kb = InlineKeyboardMarkup(row_width=2)
-    for line in START_BUTTONS:
-        buttons = (InlineKeyboardButton(text, callback_data=data) for text, data in line)
-        start_kb.row(*buttons)
+    keyboard = [[InlineKeyboardButton(text, callback_data=data) for text, data in line] for line in START_BUTTONS]
+    start_kb = InlineKeyboardMarkup(keyboard)
 
     return start_kb
 
 
-def get_hidden_markup():
-    hidden_kb = InlineKeyboardMarkup().add(
-        InlineKeyboardButton(
-            'Развернуть',
-            callback_data='expand'
-        )
-    )
-
-    return hidden_kb
+# def get_hidden_markup():
+#     hidden_kb = InlineKeyboardMarkup().add(
+#         InlineKeyboardButton(
+#             'Развернуть',
+#             callback_data='expand'
+#         )
+#     )
+#
+#     return hidden_kb
 
 
 def get_twi_markup():
-    twi_kb = InlineKeyboardMarkup(row_width=2)
-    for line in TWITTER_BUTTONS:
-        buttons = (InlineKeyboardButton(text, callback_data=data) for text, data in line)
-        twi_kb.row(*buttons)
+    keyboard = [[InlineKeyboardButton(text, callback_data=data) for text, data in line] for line in TWITTER_BUTTONS]
+    twi_kb = InlineKeyboardMarkup(keyboard)
 
     return twi_kb
 
 
 def get_vk_markup():
-    vk_kb = InlineKeyboardMarkup(row_width=2)
-    for line in VK_BUTTONS:
-        buttons = (InlineKeyboardButton(text, callback_data=data) for text, data in line)
-        vk_kb.row(*buttons)
+    keyboard = [[InlineKeyboardButton(text, callback_data=data) for text, data in line] for line in VK_BUTTONS]
+    vk_kb = InlineKeyboardMarkup(keyboard)
 
     return vk_kb
