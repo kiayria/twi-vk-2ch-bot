@@ -13,7 +13,8 @@ from app.utils.states import (
     VK_DEFAULT,
     VK_POST,
     VK_STATUS,
-    DVACH
+    DVACH_DEFAULT,
+    DVACH_POST
 )
 from app.start_menu import start_menu
 from app.twitter.commands import (
@@ -36,6 +37,13 @@ from app.vk.commands import (
     process_post
 )
 
+from app.dvach.commands import (
+    dvach_menu,
+    dvach_post,
+    dvach_news,
+    process_dvach_post
+)
+
 
 def get_conversation():
     conv = ConversationHandler(
@@ -44,6 +52,7 @@ def get_conversation():
             CHOOSING: [
                 CallbackQueryHandler(twi_menu, pattern='^twi_btn$'),
                 CallbackQueryHandler(vk_menu, pattern='^vk_btn$'),
+                CallbackQueryHandler(dvach_menu, pattern='^dvach_btn$'),
             ],
             TWITTER_DEFAULT: [
                 CallbackQueryHandler(twi_login, pattern='^twi_login$'),
@@ -70,7 +79,13 @@ def get_conversation():
             VK_STATUS: [
                 MessageHandler(Filters.text, process_status)
             ],
-            DVACH: []
+            DVACH_DEFAULT: [
+                CallbackQueryHandler(dvach_news, pattern='^dvach_news$'),
+                CallbackQueryHandler(dvach_post, pattern='^dvach_post$'),
+            ],
+            DVACH_POST: [
+                MessageHandler(Filters.text, process_dvach_post)
+            ]
         },
         fallbacks=[],
     )
