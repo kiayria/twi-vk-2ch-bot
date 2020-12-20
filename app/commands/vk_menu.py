@@ -16,16 +16,30 @@ def vk_menu(update, context):
 
 
 def vk_login(update, context):
-    pass
+
+    return VK_DEFAULT
 
 
 def vk_change_status(update, context):
-    pass
+
+    return VK_STATUS
 
 
 def vk_post(update, context):
-    pass
+
+    return VK_POST
 
 
 def vk_logout(update, context):
-    pass
+
+    return VK_DEFAULT
+
+
+def process_status(update, context):
+
+    return VK_DEFAULT
+
+
+def process_post(update, context):
+
+    return VK_DEFAULT
