@@ -1,6 +1,19 @@
-from app import updater
+# from app import updater
+from telegram.ext import Updater
+
+from cfg import config
+from app.conversation import get_conversation
+
+
+def main():
+    print(config.BOT_TOKEN)
+
+    updater = Updater(config.BOT_TOKEN, use_context=True)
+    dp = updater.dispatcher
+    dp.add_handler(get_conversation())
+    updater.start_polling()
+    updater.idle()
 
 
 if __name__ == '__main__':
-    updater.start_polling()
-    updater.idle()
+    main()

@@ -1,3 +1,4 @@
+from app import db
 from app.utils.states import CHOOSING
 from app.utils.keyboards import get_start_markup
 
@@ -7,6 +8,8 @@ def start_menu(update, context):
         text='Hi there! Let`s waste some time.',
         reply_markup=get_start_markup()
     )
+
+    db.init_user(update.effective_chat.id)
 
     return CHOOSING
 

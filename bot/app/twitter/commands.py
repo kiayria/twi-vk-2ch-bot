@@ -1,15 +1,16 @@
 import tweepy
 
+from app import db
 from app.twitter.MyStreamListener import MyStreamListener
-from app import api, twitter_auth
+from app.twitter.utils.utils import get_twitter_auth, get_twitter_api
 from app.twitter.utils.keyboards import TWITTER_MARKUP, TWITTER_STREAM_MARKUP
 from app.utils.states import TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM
 
-from pymongo import MongoClient
-
-client = MongoClient('mongodb://admin:admin@localhost:27017')
-db = client.test
-collection = db.users
+# from pymongo import MongoClient
+#
+# client = MongoClient('mongodb://admin:admin@localhost:27017')
+# db = client.test
+# collection = db.users
 
 
 def twi_menu(update, context):
@@ -20,6 +21,11 @@ def twi_menu(update, context):
         text='Функции твиттера',
         reply_markup=TWITTER_MARKUP
     )
+    twitter_auth = get_twitter_auth()
+    context.user_data['twitter_auth'] = twitter_auth
+    twitter_api = get_twitter_api(twitter_auth, update.effective_chat.id)
+    if twitter_api is not None:
+        context.user_data['twiiter_api'] = twitter_api
 
     return TWITTER_DEFAULT
 
@@ -32,40 +38,15 @@ def twi_login(update, context):
         text='Пройдите по ссылке и нажмите "Авторизовать"',
         reply_markup=TWITTER_MARKUP
     )
+    twitter_auth = context.user_data['twitter_auth']
     link = str(twitter_auth.get_authorization_url())
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=link
     )
-    pos = link.find("=")
-    oauth_token = link[pos+1:]
-    doc = collection.insert_one(
-        {
-            "chat_id": update.effective_chat.id,
-            "data": {
-                "twitter": {
-                    "oauth_token": oauth_token,
-                    "oauth_token_secret": "",
-                    "last_seen_id": "",
-                    "username": "",
-                    "twi_statistics": {
-                        "words": 0
-                    },
-                },
-                "vk": {
-                    "oauth_token": "",
-                    "vk_statistics": {
-                        "words": 0
-                    },
-                },
-                "dvach": {
-                    "dvach_statistics": {
-                        "words": 0
-                    }
-                },
-            },
-        }
-    )
+    print(link)
+    oauth_token = link.split('=')[-1]
+    db.save_tmp_data(chat_id=update.effective_chat.id, token=oauth_token)
 
     return TWITTER_DEFAULT
 
