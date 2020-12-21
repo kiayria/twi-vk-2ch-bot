@@ -4,7 +4,7 @@ from telegram.ext import Updater
 from cfg import config
 
 
-updater = Updater(config.TOKEN, use_context=True)
+updater = Updater(config.BOT_TOKEN, use_context=True)
 dp = updater.dispatcher
 
 twitter_auth = tweepy.OAuthHandler(

@@ -4,7 +4,8 @@ services:
   bot:
     build: ./bot
     restart: always
-    network_mode: bridge
+    networks:
+      - mynetwork
     depends_on:
       - mongodb
       - auth_api
@@ -13,7 +14,8 @@ services:
   auth_api:
     build: ./auth_api
     restart: always
-    network_mode: bridge
+    networks:
+      - mynetwork
     depends_on:
       - mongodb
     env_file: .env
@@ -24,9 +26,14 @@ services:
   mongodb:
     restart: always
     image: mongo:latest
-    network_mode: bridge
+    networks:
+      - mynetwork
     env_file: .env
     volumes:
-    - ./mongo/data/db:/data/db
+      - ./mongo/data/db:/data/db
     ports:
-    - "27017:27017"
+      - "27017:27017"
+
+networks:
+  mynetwork:
+    driver: bridge
