@@ -6,5 +6,6 @@
     VK_DEFAULT,
     VK_POST,
     VK_STATUS,
-    DVACH
-) = range(8)
+    DVACH_DEFAULT,
+    DVACH_POST
+) = range(9)

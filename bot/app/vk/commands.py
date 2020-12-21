@@ -1,11 +1,9 @@
-from app import api, twitter_auth
-from app.vk.utils.keyboards import get_vk_markup
-from app.utils.states import VK_DEFAULT, VK_POST, VK_STATUS
-
 import vk_api
 
 from pymongo import MongoClient
 
+from app.vk.utils.keyboards import VK_MARKUP
+from app.utils.states import VK_DEFAULT, VK_POST, VK_STATUS
 
 client = MongoClient('mongodb://admin:admin@localhost:27017')
 db = client.test
@@ -25,7 +23,7 @@ def vk_menu(update, context):
 
     query.edit_message_text(
         text='Функции ВК',
-        reply_markup=get_vk_markup()
+        reply_markup=VK_MARKUP
     )
 
     return VK_DEFAULT
@@ -102,7 +100,6 @@ def vk_change_status(update, context):
     query = update.callback_query
     query.answer()
 
-
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text='Введите статус'
@@ -154,7 +151,7 @@ def process_status(update, context):
 
     update.message.reply_text(
         answer_text,
-        reply_markup=get_vk_markup()
+        reply_markup=VK_MARKUP
     )
 
     return VK_DEFAULT
