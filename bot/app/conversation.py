@@ -24,6 +24,7 @@ from app.twitter.commands import (
     twi_news,
     twi_stream,
     twi_stream_off,
+    twi_logout,
     process_tweet,
     process_stream
 )
@@ -59,6 +60,7 @@ def get_conversation():
                 CallbackQueryHandler(twi_tweet, pattern='^twi_tweet$'),
                 CallbackQueryHandler(twi_news, pattern='^twi_news$'),
                 CallbackQueryHandler(twi_stream, pattern='^twi_stream$'),
+                CallbackQueryHandler(twi_logout, pattern='^twi_logout$'),
                 CallbackQueryHandler(back, pattern='^return$'),
             ],
             TWITTER_TWEET: [

@@ -1,6 +1,11 @@
-VK_BUTTONS = (
+VK_UNAUTHORIZED_BUTTONS = (
     (('Войти', 'vk_login'),),
-    (('Новая запись', 'vk_post'), ('Сменить статус', 'vk_change_status')),
+    (('Назад', 'return'),),
+)
+
+VK_AUTHORIZED_BUTTONS = (
+    (('Новая запись', 'vk_post'),),
+    (('Сменить статус', 'vk_change_status'),),
     (('Выйти', 'vk_logout'),),
     (('Назад', 'return'),),
 )

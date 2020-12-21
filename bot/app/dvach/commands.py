@@ -91,7 +91,7 @@ def process_dvach_post(update, context):
             answer_text = f'Это не число!'
             update.message.reply_text(
                 answer_text,
-                reply_markup=get_dvach_post_markup()
+                reply_markup=DVACH_POST_MARKUP
             )
             return state
 
@@ -133,9 +133,8 @@ def process_dvach_post(update, context):
         _clear_dvach_user_data(context)
         state = DVACH_DEFAULT
 
-
     update.message.reply_text(
         answer_text,
-        reply_markup=get_dvach_post_markup()
+        reply_markup=DVACH_POST_MARKUP
     )
     return state

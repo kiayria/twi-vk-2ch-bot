@@ -25,3 +25,7 @@ def get_twitter_api(auth, chat_id):
         wait_on_rate_limit=True,
         wait_on_rate_limit_notify=True
     )
+
+
+def remove_tokens(chat_id):
+    db.remove_twitter_tokens(chat_id)
