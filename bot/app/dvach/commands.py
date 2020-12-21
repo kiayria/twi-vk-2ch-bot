@@ -3,7 +3,7 @@ from api2ch.models import Message
 from api2ch.captcha import CaptchaHelper
 from api2ch.client import ApiClient
 
-from app.dvach.utils.keyboards import get_dvach_markup, get_dvach_post_markup
+from app.dvach.utils.keyboards import DVACH_MARKUP, DVACH_POST_MARKUP
 from app.utils.states import DVACH_DEFAULT, DVACH_POST
 
 
@@ -13,7 +13,7 @@ def dvach_menu(update, context):
 
     query.edit_message_text(
         text='Функции 2ch',
-        reply_markup=get_dvach_markup()
+        reply_markup=DVACH_MARKUP
     )
 
     return DVACH_DEFAULT
@@ -26,7 +26,7 @@ def dvach_post(update, context):
     _clear_dvach_user_data(context)
     query.edit_message_text(
         text='Введите текст сообщения',
-        reply_markup=get_dvach_post_markup()
+        reply_markup=DVACH_POST_MARKUP
     )
 
     return DVACH_POST
@@ -38,7 +38,7 @@ def dvach_news(update, context):
 
     query.edit_message_text(
         text="Секундочку... Ищем смешные посты...",
-        reply_markup=get_dvach_markup()
+        reply_markup=DVACH_MARKUP
     )
 
     api = api2ch.DvachApi('b')
@@ -53,7 +53,7 @@ def dvach_news(update, context):
     context.bot.send_message(
         update.effective_chat.id,
         text=txt,
-        reply_markup=get_dvach_markup()
+        reply_markup=DVACH_MARKUP
     )
 
     return DVACH_DEFAULT    

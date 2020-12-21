@@ -1,6 +1,6 @@
 import vk_api
 
-from app.vk.utils.keyboards import get_vk_markup
+from app.vk.utils.keyboards import VK_MARKUP
 from app.utils.states import VK_DEFAULT, VK_POST, VK_STATUS
 
 
@@ -10,7 +10,7 @@ def vk_menu(update, context):
 
     query.edit_message_text(
         text='Функции ВК',
-        reply_markup=get_vk_markup()
+        reply_markup=VK_MARKUP
     )
 
     return VK_DEFAULT
@@ -32,7 +32,7 @@ def vk_change_status(update, context):
 
     query.edit_message_text(
         text='Введите статус',
-        reply_markup=get_vk_markup()
+        reply_markup=VK_MARKUP
     )
 
     return VK_STATUS
@@ -55,7 +55,7 @@ def process_status(update, context):
 
     update.message.reply_text(
         answer_text,
-        reply_markup=get_vk_markup()
+        reply_markup=VK_MARKUP
     )
 
 

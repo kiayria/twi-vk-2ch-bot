@@ -2,7 +2,7 @@ import tweepy
 
 from app.twitter.MyStreamListener import MyStreamListener
 from app import api, twitter_auth
-from app.twitter.utils.keyboards import get_twi_markup, get_twi_stream_markup
+from app.twitter.utils.keyboards import TWITTER_MARKUP, TWITTER_STREAM_MARKUP
 from app.utils.states import TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM
 
 
@@ -12,7 +12,7 @@ def twi_menu(update, context):
 
     query.edit_message_text(
         text='Функции твиттера',
-        reply_markup=get_twi_markup()
+        reply_markup=TWITTER_MARKUP
     )
 
     return TWITTER_DEFAULT
@@ -24,7 +24,7 @@ def twi_login(update, context):
 
     query.edit_message_text(
         text='Войдите в аккаунт по ссылке',
-        reply_markup=get_twi_markup()
+        reply_markup=TWITTER_MARKUP
     )
 
     context.bot.send_message(
@@ -41,7 +41,7 @@ def twi_tweet(update, context):
 
     query.edit_message_text(
         text='Введите текст сообщения',
-        reply_markup=get_twi_markup()
+        reply_markup=TWITTER_MARKUP
     )
 
     return TWITTER_TWEET
@@ -57,7 +57,7 @@ def process_tweet(update, context):
 
     update.message.reply_text(
         answer_text,
-        reply_markup=get_twi_markup()
+        reply_markup=TWITTER_MARKUP
     )
 
     return TWITTER_DEFAULT
@@ -69,7 +69,7 @@ def twi_news(update, context):
 
     query.edit_message_text(
         text="Секундочку... Откапываем твиты...",
-        reply_markup=get_twi_markup()
+        reply_markup=TWITTER_MARKUP
     )
     timeline = api.home_timeline()
     txt = "Мы нашли эти твиты:\n"
@@ -79,7 +79,7 @@ def twi_news(update, context):
     context.bot.send_message(
         update.effective_chat.id,
         text=txt,
-        reply_markup=get_twi_markup()
+        reply_markup=TWITTER_MARKUP
     )
     return TWITTER_DEFAULT
 
@@ -90,7 +90,7 @@ def twi_stream(update, context):
 
     query.edit_message_text(
         text="Что будем искать?",
-        reply_markup=get_twi_markup()
+        reply_markup=TWITTER_MARKUP
     )
     return TWITTER_STREAM
 
@@ -107,7 +107,7 @@ def twi_stream_off(update, context):
 
     query.edit_message_text(
         text="Стрим закончен",
-        reply_markup=get_twi_markup()
+        reply_markup=TWITTER_MARKUP
     )
 
     return TWITTER_DEFAULT
@@ -118,7 +118,7 @@ def process_stream(update, context):
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text='Секундочку... Запускаем стрим...',
-        reply_markup=get_twi_stream_markup()
+        reply_markup=TWITTER_STREAM_MARKUP
     )
     tags = str(text).split(' ')
 
