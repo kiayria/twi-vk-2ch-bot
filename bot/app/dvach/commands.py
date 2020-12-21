@@ -41,7 +41,7 @@ def dvach_news(update, context):
         reply_markup=DVACH_MARKUP
     )
 
-    api = api2ch.DvachApi('b')
+    api = DvachApi('b')
 
     # Top 10 threads sorted by posts count
     top = api.get_top(method='posts', num=10)
