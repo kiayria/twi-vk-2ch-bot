@@ -13,7 +13,8 @@ collection = db.users
 
 # FOR ACQUIRING TOKEN
 PERMISSIONS = vk_api.VkUserPermissions.STATUS + vk_api.VkUserPermissions.WALL + vk_api.VkUserPermissions.OFFLINE
-REDIRECT_URI = 'https://oauth.vk.com/blank.hmtl'
+#REDIRECT_URI = 'https://oauth.vk.com/blank.hmtl'
+REDIRECT_URI = 'localhost:5000/vk'
 
 HARDCODE_TOKEN = '77a0e7da7d5583c180f24d734789c83ff62bc8b339b9986fa2652b32dc74031770943472f3c7c6df0bb5d'
 
