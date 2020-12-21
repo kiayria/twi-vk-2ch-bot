@@ -33,7 +33,7 @@ def get_verifier():
                 }
         }, upsert=True)
     print(doc)
-    return redirect('http://t.me/twittertgbot')
+    return redirect('http://t.me/TwiVk_bot')
 
 
 if __name__ == '__main__':

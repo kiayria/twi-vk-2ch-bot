@@ -5,6 +5,12 @@ from app import api, twitter_auth
 from app.twitter.utils.keyboards import TWITTER_MARKUP, TWITTER_STREAM_MARKUP
 from app.utils.states import TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM
 
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://admin:admin@localhost:27017')
+db = client.test
+collection = db.users
+
 
 def twi_menu(update, context):
     query = update.callback_query
@@ -23,13 +29,42 @@ def twi_login(update, context):
     query.answer()
 
     query.edit_message_text(
-        text='Войдите в аккаунт по ссылке',
+        text='Пройдите по ссылке и нажмите "Авторизовать"',
         reply_markup=TWITTER_MARKUP
     )
-
+    link = str(twitter_auth.get_authorization_url())
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text=str(twitter_auth.get_authorization_url())
+        text=link
+    )
+    pos = link.find("=")
+    oauth_token = link[pos+1:]
+    doc = collection.insert_one(
+        {
+            "chat_id": update.effective_chat.id,
+            "data": {
+                "twitter": {
+                    "oauth_token": oauth_token,
+                    "oauth_token_secret": "",
+                    "last_seen_id": "",
+                    "username": "",
+                    "twi_statistics": {
+                        "words": 0
+                    },
+                },
+                "vk": {
+                    "oauth_token": "",
+                    "vk_statistics": {
+                        "words": 0
+                    },
+                },
+                "dvach": {
+                    "dvach_statistics": {
+                        "words": 0
+                    }
+                },
+            },
+        }
     )
 
     return TWITTER_DEFAULT
