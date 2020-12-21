@@ -7,13 +7,6 @@ from app.twitter.utils.keyboards import TWITTER_MARKUP, TWITTER_STREAM_MARKUP
 from app.utils.states import TWITTER_DEFAULT, TWITTER_TWEET, TWITTER_STREAM
 
 
-# from pymongo import MongoClient
-#
-# client = MongoClient('mongodb://admin:admin@localhost:27017')
-# db = client.test
-# collection = db.users
-
-
 def twi_menu(update, context):
     query = update.callback_query
     query.answer()
@@ -48,7 +41,6 @@ def twi_login(update, context):
     print(link)
     oauth_token = link.split('=')[-1]
     db.save_token(chat_id=update.effective_chat.id, token=oauth_token)
-    db.save_tmp_data(chat_id=update.effective_chat.id, token=oauth_token)
 
     return TWITTER_DEFAULT
 

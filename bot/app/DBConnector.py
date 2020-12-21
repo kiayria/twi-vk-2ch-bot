@@ -59,9 +59,3 @@ class DBConnector:
                'data.twitter.oauth_token': token
            }
         }, upsert=True)
-
-    def save_tmp_data(self, chat_id, token):
-        self.client.test.tmp.insert_one({
-            'chat_id': str(chat_id),
-            'token': token
-        })
