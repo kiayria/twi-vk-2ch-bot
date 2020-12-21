@@ -9,3 +9,15 @@ def start_menu(update, context):
     )
 
     return CHOOSING
+
+
+def back(update, context):
+    query = update.callback_query
+    query.answer()
+
+    query.edit_message_text(
+        text='Hi there! Let`s waste some time.',
+        reply_markup=get_start_markup()
+    )
+
+    return CHOOSING

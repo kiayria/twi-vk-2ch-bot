@@ -1,8 +1,7 @@
-from app import api, twitter_auth
+import vk_api
+
 from app.vk.utils.keyboards import get_vk_markup
 from app.utils.states import VK_DEFAULT, VK_POST, VK_STATUS
-
-# import vk_api
 
 
 def vk_menu(update, context):

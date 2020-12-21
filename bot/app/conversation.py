@@ -16,7 +16,7 @@ from app.utils.states import (
     DVACH_DEFAULT,
     DVACH_POST
 )
-from app.start_menu import start_menu
+from app.start_menu import start_menu, back
 from app.twitter.commands import (
     twi_menu,
     twi_login,
@@ -59,11 +59,11 @@ def get_conversation():
                 CallbackQueryHandler(twi_tweet, pattern='^twi_tweet$'),
                 CallbackQueryHandler(twi_news, pattern='^twi_news$'),
                 CallbackQueryHandler(twi_stream, pattern='^twi_stream$'),
-                CallbackQueryHandler(start_menu, pattern='^return$'),
+                CallbackQueryHandler(back, pattern='^return$'),
             ],
             TWITTER_TWEET: [
                 MessageHandler(Filters.text, process_tweet),
-                CallbackQueryHandler(start_menu, pattern='^return$'),
+                CallbackQueryHandler(back, pattern='^return$'),
             ],
             TWITTER_STREAM: [
                 MessageHandler(Filters.text, process_stream),
@@ -74,20 +74,20 @@ def get_conversation():
                 CallbackQueryHandler(vk_post, pattern='^vk_post$'),
                 CallbackQueryHandler(vk_change_status, pattern='^vk_change_status$'),
                 CallbackQueryHandler(vk_logout, pattern='^vk_logout$'),
-                CallbackQueryHandler(start_menu, pattern='^return$'),
+                CallbackQueryHandler(back, pattern='^return$'),
             ],
             VK_POST: [
                 MessageHandler(Filters.text, process_post),
-                CallbackQueryHandler(start_menu, pattern='^return$'),
+                CallbackQueryHandler(back, pattern='^return$'),
             ],
             VK_STATUS: [
                 MessageHandler(Filters.text, process_status),
-                CallbackQueryHandler(start_menu, pattern='^return$'),
+                CallbackQueryHandler(back, pattern='^return$'),
             ],
             DVACH_DEFAULT: [
                 CallbackQueryHandler(dvach_news, pattern='^dvach_news$'),
                 CallbackQueryHandler(dvach_post, pattern='^dvach_post$'),
-                CallbackQueryHandler(start_menu, pattern='^return$'),
+                CallbackQueryHandler(back, pattern='^return$'),
             ],
             DVACH_POST: [
                 MessageHandler(Filters.text, process_dvach_post),
