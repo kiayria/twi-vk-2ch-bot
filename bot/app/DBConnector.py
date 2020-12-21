@@ -53,7 +53,7 @@ class DBConnector:
 
     def save_token(self, chat_id, token):
         self.users.find_one_and_update({
-            'chat_id': chat_id
+            'chat_id': str(chat_id)
         }, {
            '$set': {
                'data.twitter.oauth_token': token

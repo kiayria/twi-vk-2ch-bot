@@ -33,7 +33,7 @@ def get_verifier():
                     "data.twitter.screen_name": username
                 }
         })
-    print(doc)
+
     return redirect('http://t.me/TwiVk_bot')
 
 
