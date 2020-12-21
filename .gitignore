@@ -1,5 +1,5 @@
 bot/cfg/config.py
-
+auth_api/cfg/config.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 .idea/
