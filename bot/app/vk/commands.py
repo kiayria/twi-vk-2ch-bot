@@ -42,9 +42,12 @@ def vk_login(update, context):
     # print(Users[0]['first_name'])
 
     # this attempt to send user a message throws exceptions for some reason :\
-    update.message.text(
-        answer_text,
-        reply_markup=get_vk_markup()
+
+    chat_id = update.effective_user.id
+
+    context.bot.send_message(
+        chat_id=chat_id,
+        text=answer_text
     )
 
     return VK_DEFAULT
@@ -55,10 +58,11 @@ def vk_change_status(update, context):
     query = update.callback_query
     query.answer()
 
-    query.edit_message_text(
-        text='Введите статус',
-        reply_markup=get_vk_markup()
+    context.bot.send_message(
+        chat_id=update.effective_user.id,
+        text='Введите статус'
     )
+
 
     return VK_STATUS
 
@@ -68,15 +72,21 @@ def vk_post(update, context):
     query = update.callback_query
     query.answer()
 
-    query.edit_message_text(
-        text='Введите текст поста',
-        reply_markup=get_vk_markup()
+    context.bot.send_message(
+        chat_id=update.effective_user.id,
+        text='Введите текст поста'
     )
 
     return VK_POST
 
 
 def vk_logout(update, context):
+
+    context.bot.send_message(
+        chat_id=update.effective_user.id,
+        text='Произошёл выход'
+    )
+
     return VK_DEFAULT
 
 
