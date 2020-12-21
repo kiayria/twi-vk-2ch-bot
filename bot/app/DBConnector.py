@@ -8,14 +8,14 @@ class DBConnector:
         client = MongoClient(config.MONGO_URI)
         self.client = client
         self.users = client.test.users
-        client.test.users.find_one()
 
     def init_user(self, chat_id):
         user = self.users.find_one({'chat_id': str(chat_id)})
+        print(f'User is {user}')
         if user is None:
             self.users.insert_one(
                 {
-                    "chat_id": chat_id,
+                    "chat_id": str(chat_id),
                     "data": {
                         "twitter": {
                             "oauth_token": "",
@@ -50,6 +50,15 @@ class DBConnector:
             'token_key': user.token_key,
             'token_secret': user.token_secret
         }
+
+    def save_token(self, chat_id, token):
+        self.users.find_one_and_update({
+            'chat_id': chat_id
+        }, {
+           '$set': {
+               'data.twitter.oauth_token': token
+           }
+        }, upsert=True)
 
     def save_tmp_data(self, chat_id, token):
         self.client.test.tmp.insert_one({
