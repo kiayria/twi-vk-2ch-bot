@@ -25,7 +25,7 @@ def twi_menu(update, context):
     context.user_data['twitter_auth'] = twitter_auth
     twitter_api = get_twitter_api(twitter_auth, update.effective_chat.id)
     if twitter_api is not None:
-        context.user_data['twiiter_api'] = twitter_api
+        context.user_data['twitter_api'] = twitter_api
 
     return TWITTER_DEFAULT
 

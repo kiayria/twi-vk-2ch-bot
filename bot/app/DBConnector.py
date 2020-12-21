@@ -52,7 +52,7 @@ class DBConnector:
         }
 
     def save_tmp_data(self, chat_id, token):
-        self.client.tmp.insert_one({
+        self.client.test.tmp.insert_one({
             'chat_id': str(chat_id),
             'token': token
         })
