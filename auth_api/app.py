@@ -21,17 +21,18 @@ def get_verifier():
     username = res_split[3].split('=')[1]
     doc = collection.find_one_and_update(
         {
-            "oauth_token": oauth_token_tmp
+            "data.twitter.oauth_token": oauth_token_tmp
         },
         {
             "$set":
                 {
-                    "oauth_token": oauth_token,
-                    "oauth_token_secret": oauth_secret,
-                    "user_id": userid,
-                    "screen_name": username
+                    "data.twitter.oauth_token": oauth_token,
+                    "data.twitter.oauth_token_secret": oauth_secret,
+                    "data.twitter.last_seen_id": "1",
+                    "data.twitter.user_id": userid,
+                    "data.twitter.screen_name": username
                 }
-        }, upsert=True)
+        })
     print(doc)
     return redirect('http://t.me/TwiVk_bot')
 
