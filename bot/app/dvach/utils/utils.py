@@ -10,4 +10,4 @@ def stat_text(chat_id, text):
         else:
             unique_words[word] = 1
 
-    db.update_stat(chat_id, unique_words, 'twitter')
+    db.update_stat(chat_id, unique_words, 'dvach')
