@@ -62,6 +62,7 @@ def process_tweet(update, context):
         context.user_data['twitter_auth'],
         update.effective_chat.id
     )
+
     if twitter_api is None:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
