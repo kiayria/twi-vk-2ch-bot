@@ -53,7 +53,7 @@ def twi_login(update, context):
         text=f'Пройдите по ссылке и нажмите "Авторизовать": {link}'
     )
     oauth_token = link.split('=')[-1]
-    db.save_token(chat_id=update.effective_chat.id, token=oauth_token)
+    db.save_twitter_token(chat_id=update.effective_chat.id, token=oauth_token)
 
     step = 0.2
     secs = 0

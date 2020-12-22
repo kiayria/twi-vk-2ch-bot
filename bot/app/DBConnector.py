@@ -59,13 +59,31 @@ class DBConnector:
 
         return {'token_key': user['data']['vk']['oauth_token']}
 
-    def save_token(self, chat_id, token):
+    def save_twitter_token(self, chat_id, token):
         self.users.find_one_and_update({
             'chat_id': str(chat_id)
         }, {
            '$set': {
-               'data.twitter.oauth_token': token
+               'data.vk.oauth_token': token
            }
+        })
+
+    def save_vk_token(self, chat_id, token):
+        self.users.find_one_and_update({
+            'chat_id': str(chat_id)
+        }, {
+            '$set': {
+                'data.vk.oauth_token': token
+            }
+        })
+
+    def remove_vk_token(self, chat_id):
+        self.users.find_one_and_update({
+            'chat_id': str(chat_id)
+        }, {
+            '$set': {
+                'data.vk.oauth_token': ''
+            }
         })
 
     def remove_twitter_tokens(self, chat_id):
