@@ -1,3 +1,4 @@
+import requests
 import vk_api
 
 from pymongo import MongoClient
@@ -12,7 +13,7 @@ collection = db.users
 # FOR ACQUIRING TOKEN
 PERMISSIONS = vk_api.VkUserPermissions.STATUS + vk_api.VkUserPermissions.WALL + vk_api.VkUserPermissions.OFFLINE
 #REDIRECT_URI = 'https://oauth.vk.com/blank.hmtl'
-REDIRECT_URI = 'localhost:5000/vk'
+REDIRECT_URI = 'http://localhost:5000/vk'
 
 HARDCODE_TOKEN = '77a0e7da7d5583c180f24d734789c83ff62bc8b339b9986fa2652b32dc74031770943472f3c7c6df0bb5d'
 
@@ -32,15 +33,20 @@ def vk_menu(update, context):
 def vk_login(update, context):
 
     # building link
-    link = 'https://oauth.vk.com/authorize?client_id=7705522&scope={PERMISSIONS}&redirect_uri={REDIRECT_URI}&display=page&v=5.126&response_type=token' \
-        .format(PERMISSIONS=PERMISSIONS, REDIRECT_URI=REDIRECT_URI)
+    uri = REDIRECT_URI
+    chat_id = str(update.effective_chat.id)
+    link = f'https://oauth.vk.com/authorize?client_id=7705522&scope={PERMISSIONS}&redirect_uri={REDIRECT_URI}&display=page&v=5.126&response_type=code&state={chat_id}'
 
     # get token
     access_token = ''
 
     answer_text = 'Авторизуйтесь по ссылке:\n' + link
-    chat_id = update.effective_chat.id
+    chat_id = str(update.effective_chat.id)
 
+    context.bot.send_message(
+        chat_id=chat_id,
+        text=answer_text
+    )
     # if this is a new user then add new structure, else update existing one
     if collection.find_one({'chat_id': chat_id}) is None:
         collection.insert_one(
@@ -87,10 +93,7 @@ def vk_login(update, context):
 
     # this attempt to send user a message throws exceptions for some reason :\
 
-    context.bot.send_message(
-        chat_id=chat_id,
-        text=answer_text
-    )
+
 
     return VK_DEFAULT
 
@@ -137,16 +140,23 @@ def process_status(update, context):
     answer_text = ''
     access_token = ''
 
-    chat_id = update.effective_chat.id
+    chat_id = str(update.effective_chat.id)
 
     doc = collection.find_one({"chat_id": chat_id})
     if doc is not None:
         access_token = doc["data"]["vk"]["oauth_token"]
+    print(doc)
+    print(type(doc))
+    print(access_token)
+
+    # link = f"https://api.vk.com/method/status.set?text=%22lol%22&access_token={access_token}&v=5.126"
+    # res = requests.post(link)
 
     try:
         answer_text = 'Вы поставили статус:\n' + status_text
         vk_api.VkApi(token=access_token).get_api().status.set(text=status_text)
-    except vk_api.ApiError:
+    except vk_api.ApiError as E:
+        print(E)
         answer_text = 'Ошибка аутентификации. Попробуйте перезайти'
 
     update.message.reply_text(
@@ -162,7 +172,7 @@ def process_post(update, context):
     answer_text = ''
     access_token = ''
 
-    chat_id = update.effective_chat.id
+    chat_id = str(update.effective_chat.id)
 
     doc = collection.find_one({"chat_id": chat_id})
     if doc is not None:
@@ -176,7 +186,7 @@ def process_post(update, context):
 
     update.message.reply_text(
         answer_text,
-        reply_markup=get_vk_markup()
+        reply_markup=VK_MARKUP
     )
 
     return VK_DEFAULT

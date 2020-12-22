@@ -1,11 +1,15 @@
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, request, redirect, url_for
 import requests
 from pymongo import MongoClient
+
 
 app = Flask(__name__)
 client = MongoClient('mongodb://admin:admin@localhost:27017')
 db = client.test
 collection = db.users
+
+secret = ""
+
 
 
 @app.route('/twitter')
@@ -35,6 +39,36 @@ def get_verifier():
         })
 
     return redirect('http://t.me/TwiVk_bot')
+
+
+@app.route('/vk')
+def get_verifier_vk():
+    print(request.args)
+    code = request.args.get('code')
+    chat_id = request.args.get('state')
+    callback_uri = url_for('get_verifier_vk', _external=True)
+    link = f"https://oauth.vk.com/access_token?client_id=7705522&client_secret={secret}&redirect_uri={callback_uri}&code={code}"
+    res = requests.post(link)
+    res_json = res.json()
+    access_token = res_json["access_token"]
+    print(access_token)
+    doc = collection.find_one_and_update(
+        {
+            "chat_id": chat_id
+        },
+        {
+            "$set":
+                {
+                    "data.vk.oauth_token": access_token
+                }
+        })
+
+    return redirect('http://t.me/TwiVk_bot')
+
+
+@app.route("/auth_vk")
+def get_auth_vk():
+    ...
 
 
 if __name__ == '__main__':
