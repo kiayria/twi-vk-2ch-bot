@@ -3,14 +3,15 @@ from app import db
 
 def get_stat(chat_id, api=None):
     user = db.get_user(chat_id)
-    if user is None or api not in ('twitter', 'vk', 'dvach'):
+    if user is None or api not in (None, 'twitter', 'vk', 'dvach'):
         return
     if api is None:
         dicts = [
-            user['data']['twitter']['statistics'],
-            user['data']['vk']['statistics'],
-            user['data']['dvach']['statistics'],
+            user['data']['twitter']['statistics']['words'],
+            user['data']['vk']['statistics']['words'],
+            user['data']['dvach']['statistics']['words'],
         ]
+        print(dicts)
         sum_dict = dict()
         for d in dicts:
             for k, v in d.items():

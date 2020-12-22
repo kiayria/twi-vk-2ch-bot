@@ -23,18 +23,18 @@ class DBConnector:
                             "last_seen_id": "",
                             "username": "",
                             "statistics": {
-                                "words": []
+                                "words": {}
                             },
                         },
                         "vk": {
                             "oauth_token": "",
                             "statistics": {
-                                "words": []
+                                "words": {}
                             },
                         },
                         "dvach": {
                             "statistics": {
-                                "words": []
+                                "words": {}
                             }
                         },
                     },
@@ -92,7 +92,7 @@ class DBConnector:
             else:
                 user['data'][api]['statistics']['words'][word] = count
 
-        self.users.findOneAndReplace(
+        self.users.replace_one(
             {'chat_id': str(chat_id)},
             user
         )

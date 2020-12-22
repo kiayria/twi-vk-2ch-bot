@@ -20,17 +20,18 @@ def stat_all(update, context):
     query.answer()
 
     words = get_stat(update.effective_chat.id)
+    print(words)
     if words is None:
         query.edit_message_text(
             text='Нет выбранной статистики для этого чата.',
             reply_markup=STATISTICS_MARKUP
         )
-    text = '\n'.join([f'{k}: {v}' for k, v in words.items()])
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=text,
-        reply_markup=STATISTICS_MARKUP
-    )
+    else:
+        text = '\n'.join([f'{k}: {v}' for k, v in words.items()])
+        context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=text,
+        )
 
     return STATISTICS
 
@@ -45,12 +46,12 @@ def stat_twitter(update, context):
             text='Нет выбранной статистики для этого чата.',
             reply_markup=STATISTICS_MARKUP
         )
-    text = '\n'.join([f'{k}: {v}' for k, v in words.items()])
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=text,
-        reply_markup=STATISTICS_MARKUP
-    )
+    else:
+        text = '\n'.join([f'{k}: {v}' for k, v in words.items()])
+        context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=text,
+        )
 
     return STATISTICS
 
@@ -65,12 +66,12 @@ def stat_vk(update, context):
             text='Нет выбранной статистики для этого чата.',
             reply_markup=STATISTICS_MARKUP
         )
-    text = '\n'.join([f'{k}: {v}' for k, v in words.items()])
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=text,
-        reply_markup=STATISTICS_MARKUP
-    )
+    else:
+        text = '\n'.join([f'{k}: {v}' for k, v in words.items()])
+        context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=text,
+        )
 
     return STATISTICS
 
@@ -85,11 +86,12 @@ def stat_2ch(update, context):
             text='Нет выбранной статистики для этого чата.',
             reply_markup=STATISTICS_MARKUP
         )
-    text = '\n'.join([f'{k}: {v}' for k, v in words.items()])
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=text,
-        reply_markup=STATISTICS_MARKUP
-    )
+    else:
+
+        text = '\n'.join([f'{k}: {v}' for k, v in words.items()])
+        context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=text,
+        )
 
     return STATISTICS
