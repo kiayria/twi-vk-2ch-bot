@@ -25,3 +25,19 @@ def get_twitter_api(auth, chat_id):
         wait_on_rate_limit=True,
         wait_on_rate_limit_notify=True
     )
+
+
+def remove_tokens(chat_id):
+    db.remove_twitter_tokens(chat_id)
+
+
+def stat_text(chat_id, text):
+    words = text.replace('\n', ' ').split(' ')
+    unique_words = dict()
+    for word in words:
+        if word in unique_words:
+            unique_words[word] += 1
+        else:
+            unique_words[word] = 1
+
+    db.update_stat(chat_id, unique_words, 'twitter')

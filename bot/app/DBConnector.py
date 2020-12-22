@@ -43,13 +43,21 @@ class DBConnector:
 
     def get_twitter_tokens(self, chat_id):
         user = self.users.find_one({'chat_id': str(chat_id)})
-        if user is None:
+        if user is None or user['data']['twitter']['oauth_token'] == '' \
+                or user['data']['twitter']['oauth_token_secret'] == '':
             return None
 
         return {
-            'token_key': user.token_key,
-            'token_secret': user.token_secret
+            'token_key': user['data']['twitter']['oauth_token'],
+            'token_secret': user['data']['twitter']['oauth_token_secret']
         }
+
+    def get_vk_token(self, chat_id):
+        user = self.users.find_one({'chat_id': str(chat_id)})
+        if user is None or user['data']['vk']['oauth_token'] == '':
+            return None
+
+        return {'token_key': user['data']['vk']['oauth_token']}
 
     def save_token(self, chat_id, token):
         self.users.find_one_and_update({
@@ -58,4 +66,33 @@ class DBConnector:
            '$set': {
                'data.twitter.oauth_token': token
            }
-        }, upsert=True)
+        })
+
+    def remove_twitter_tokens(self, chat_id):
+        self.users.find_one_and_update({
+            'chat_id': str(chat_id)
+        }, {
+            '$set': {
+                'data.twitter.oauth_token': '',
+                'data.twitter.oauth_token_secret': '',
+            }
+        })
+
+    def get_user(self, chat_id):
+        return self.users.find_one({'chat_id': str(chat_id)})
+
+    def update_stat(self, chat_id, words, api=None):
+        if api not in ('twitter', 'vk', 'dvach'):
+            return
+
+        user = self.users.find_one({'chat_id': str(chat_id)})
+        for word, count in words.items():
+            if word in user['data'][api]['statistics']['words']:
+                user['data'][api]['statistics']['words'][word] += count
+            else:
+                user['data'][api]['statistics']['words'][word] = count
+
+        self.users.findOneAndReplace(
+            {'chat_id': str(chat_id)},
+            user
+        )

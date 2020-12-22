@@ -6,8 +6,6 @@ from app.conversation import get_conversation
 
 
 def main():
-    print(config.BOT_TOKEN)
-
     updater = Updater(config.BOT_TOKEN, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(get_conversation())
