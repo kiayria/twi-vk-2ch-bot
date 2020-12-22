@@ -3,8 +3,8 @@ import vk_api
 
 from pymongo import MongoClient
 
-from app.vk.utils.keyboards import VK_MARKUP
-from app.utils.states import VK_DEFAULT, VK_POST, VK_STATUS, VK_LOGIN
+from app.vk.utils.keyboards import VK_UNAUTHORIZED_MARKUP, VK_AUTHORIZED_MARKUP
+from app.utils.states import VK_DEFAULT, VK_POST, VK_STATUS
 
 client = MongoClient('mongodb://admin:admin@localhost:27017')
 db = client.test
@@ -24,7 +24,7 @@ def vk_menu(update, context):
 
     query.edit_message_text(
         text='Функции ВК',
-        reply_markup=VK_MARKUP
+        reply_markup=VK_UNAUTHORIZED_MARKUP
     )
 
     return VK_DEFAULT
@@ -181,7 +181,7 @@ def process_status(update, context):
 
     update.message.reply_text(
         answer_text,
-        reply_markup=VK_MARKUP
+        reply_markup=VK_UNAUTHORIZED_MARKUP
     )
 
     return VK_DEFAULT
@@ -206,7 +206,7 @@ def process_post(update, context):
 
     update.message.reply_text(
         answer_text,
-        reply_markup=VK_MARKUP
+        reply_markup=VK_AUTHORIZED_MARKUP
     )
 
     return VK_DEFAULT

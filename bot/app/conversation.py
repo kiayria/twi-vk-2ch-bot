@@ -15,7 +15,8 @@ from app.utils.states import (
     VK_STATUS,
     VK_LOGIN,
     DVACH_DEFAULT,
-    DVACH_POST
+    DVACH_POST,
+    STATISTICS
 )
 from app.start_menu import start_menu, back
 from app.twitter.commands import (
@@ -25,6 +26,7 @@ from app.twitter.commands import (
     twi_news,
     twi_stream,
     twi_stream_off,
+    twi_logout,
     process_tweet,
     process_stream
 )
@@ -46,6 +48,14 @@ from app.dvach.commands import (
     process_dvach_post
 )
 
+from app.statistics.commands import (
+    stat_menu,
+    stat_all,
+    stat_vk,
+    stat_twitter,
+    stat_2ch
+)
+
 
 def get_conversation():
     conv = ConversationHandler(
@@ -55,12 +65,14 @@ def get_conversation():
                 CallbackQueryHandler(twi_menu, pattern='^twi_btn$'),
                 CallbackQueryHandler(vk_menu, pattern='^vk_btn$'),
                 CallbackQueryHandler(dvach_menu, pattern='^dvach_btn$'),
+                CallbackQueryHandler(stat_menu, pattern='^stat_btn$'),
             ],
             TWITTER_DEFAULT: [
                 CallbackQueryHandler(twi_login, pattern='^twi_login$'),
                 CallbackQueryHandler(twi_tweet, pattern='^twi_tweet$'),
                 CallbackQueryHandler(twi_news, pattern='^twi_news$'),
                 CallbackQueryHandler(twi_stream, pattern='^twi_stream$'),
+                CallbackQueryHandler(twi_logout, pattern='^twi_logout$'),
                 CallbackQueryHandler(back, pattern='^return$'),
             ],
             TWITTER_TWEET: [
@@ -98,6 +110,13 @@ def get_conversation():
             DVACH_POST: [
                 MessageHandler(Filters.text, process_dvach_post),
                 CallbackQueryHandler(start_menu, pattern='^return$'),
+            ],
+            STATISTICS: [
+                CallbackQueryHandler(stat_all, pattern='^stat_all$'),
+                CallbackQueryHandler(stat_twitter, pattern='^stat_twitter$'),
+                CallbackQueryHandler(stat_vk, pattern='^stat_vk$'),
+                CallbackQueryHandler(stat_2ch, pattern='^stat_2ch$'),
+                CallbackQueryHandler(back, pattern='^return$'),
             ]
         },
         fallbacks=[],
