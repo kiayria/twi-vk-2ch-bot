@@ -3,7 +3,7 @@ from time import sleep
 
 from app import db
 from app.twitter.MyStreamListener import MyStreamListener
-from app.twitter.utils.utils import get_twitter_auth, get_twitter_api, remove_tokens
+from app.twitter.utils.utils import get_twitter_auth, get_twitter_api, remove_tokens, stat_text
 from app.twitter.utils.keyboards import (
     TWITTER_UNAUTHORIZED_MARKUP,
     TWITTER_AUTHORIZED_MARKUP,
@@ -101,6 +101,7 @@ def process_tweet(update, context):
     else:
         text = update.message.text
         if len(text) < 140:
+            stat_text(update.effective_chat.id, text)
             context.user_data['twitter_api'].update_status(text)
             answer_text = 'Твит отправлен'
         else:

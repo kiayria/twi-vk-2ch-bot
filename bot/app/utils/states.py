@@ -9,4 +9,4 @@
     DVACH_DEFAULT,
     DVACH_POST,
     STATISTICS
-) = range(9)
+) = range(10)

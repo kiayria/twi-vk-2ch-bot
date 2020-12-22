@@ -3,6 +3,7 @@ from api2ch.models import Message
 from api2ch.captcha import CaptchaHelper
 from api2ch.client import ApiClient
 
+from app.dvach.utils.utils import stat_text
 from app.dvach.utils.keyboards import DVACH_MARKUP, DVACH_POST_MARKUP
 from app.utils.states import DVACH_DEFAULT, DVACH_POST
 
@@ -121,6 +122,7 @@ def process_dvach_post(update, context):
             api = DvachApi(board=board)
             message = Message(board_id=api.board.id, thread_id=thread_id, comment=dvach_post, sage=True)
             api.send_post(message=message, captcha=captcha)
+            stat_text(update.effective_chat.id, dvach_post)
             answer_text = 'Пост отправлен!'
             _clear_dvach_user_data(context)
             state = DVACH_DEFAULT
