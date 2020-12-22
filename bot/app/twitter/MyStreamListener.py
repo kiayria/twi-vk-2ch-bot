@@ -1,5 +1,5 @@
 import tweepy
-from app.twitter.utils.keyboards import get_twi_stream_markup
+from app.twitter.utils.keyboards import TWITTER_STREAM_MARKUP
 
 
 class MyStreamListener(tweepy.StreamListener):
@@ -15,7 +15,7 @@ class MyStreamListener(tweepy.StreamListener):
         self.bot.send_message(
             chat_id=self.chat_id,
             text=tweet_text,
-            reply_markup=get_twi_stream_markup()
+            reply_markup=TWITTER_STREAM_MARKUP
         )
 
     def on_error(self, status):

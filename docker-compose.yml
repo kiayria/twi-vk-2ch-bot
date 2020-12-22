@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  bot:
+    build: ./bot
+    restart: always
+    networks:
+      - mynetwork
+    depends_on:
+      - mongodb
+      - auth_api
+    env_file: .env
+
+  auth_api:
+    build: ./auth_api
+    restart: always
+    networks:
+      - mynetwork
+    depends_on:
+      - mongodb
+    env_file: .env
+    ports:
+    - "5000:5000"
+
+
+  mongodb:
+    restart: always
+    image: mongo:latest
+    networks:
+      - mynetwork
+    env_file: .env
+    volumes:
+      - ./mongo/data/db:/data/db
+    ports:
+      - "27017:27017"
+
+networks:
+  mynetwork:
+    driver: bridge

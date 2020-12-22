@@ -1,3 +1,4 @@
+from app import db
 from app.utils.states import CHOOSING
 from app.utils.keyboards import get_start_markup
 
@@ -8,16 +9,18 @@ def start_menu(update, context):
         reply_markup=get_start_markup()
     )
 
+    db.init_user(update.effective_chat.id)
+
     return CHOOSING
 
 
-# @dp.callback_query_handler(text='return', state='*')
-# async def start_menu(query, state):
-#     await query.answer()
-#     await query.message.edit_text(
-#         reply_markup=get_start_markup())
+def back(update, context):
+    query = update.callback_query
+    query.answer()
 
+    query.edit_message_text(
+        text='Hi there! Let`s waste some time.',
+        reply_markup=get_start_markup()
+    )
 
-# @dp.message_handler(content_types=types.ContentTypes.ANY, state='*')
-# async def unknown_command(message):
-#     await message.reply('Эта команда мне неизвестна.')
+    return CHOOSING
