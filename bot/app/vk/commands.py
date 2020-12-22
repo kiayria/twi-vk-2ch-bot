@@ -11,10 +11,11 @@ client = MongoClient('mongodb://admin:admin@localhost:27017')
 db = client.test
 collection = db.users
 
+
 # FOR ACQUIRING TOKEN
 PERMISSIONS = vk_api.VkUserPermissions.STATUS + vk_api.VkUserPermissions.WALL + vk_api.VkUserPermissions.OFFLINE
 #REDIRECT_URI = 'https://oauth.vk.com/blank.hmtl'
-REDIRECT_URI = 'localhost:5000/vk'
+REDIRECT_URI = 'localhost:5000/vk?chat_id=123'
 
 HARDCODE_TOKEN = '77a0e7da7d5583c180f24d734789c83ff62bc8b339b9986fa2652b32dc74031770943472f3c7c6df0bb5d'
 
@@ -40,8 +41,13 @@ def vk_login(update, context):
     # get token
     access_token = ''
 
-    answer_text = 'Авторизуйтесь по ссылке:\n' + link
+    answer_text = 'Авторизуйтесь по ссылке:\n' + link + '\nСкопируте сюда токен, пожалста. \nДа, по-другому никак'
     chat_id = update.effective_chat.id
+
+    context.bot.send_message(
+        chat_id=chat_id,
+        text=answer_text
+    )
 
     # if this is a new user then add new structure, else update existing one
     if collection.find_one({'chat_id': chat_id}) is None:
@@ -89,12 +95,13 @@ def vk_login(update, context):
 
     # this attempt to send user a message throws exceptions for some reason :\
 
-    context.bot.send_message(
-        chat_id=chat_id,
-        text=answer_text
-    )
 
     return VK_DEFAULT
+
+def process_login_vk(update, context):
+    # Дай токен
+    token = update.message.text
+    chat_id =
 
 
 def vk_change_status(update, context):
