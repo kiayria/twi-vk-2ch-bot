@@ -29,7 +29,7 @@ def vk_menu(update, context):
 
     return VK_DEFAULT
 
-
+# ДАЙ ТОКЕН!
 def vk_login(update, context):
 
     # building link
@@ -47,11 +47,20 @@ def vk_login(update, context):
         chat_id=chat_id,
         text=answer_text
     )
+
+    return VK_LOGIN
+
+
+def process_login_vk(update, context):
+
+    chat_id = str(update.effective_chat.id)
+    access_token = update.message.text
+
     # if this is a new user then add new structure, else update existing one
     if collection.find_one({'chat_id': chat_id}) is None:
         collection.insert_one(
             {
-                "chat_id": update.effective_chat.id,
+                "chat_id": chat_id,
                 "data": {
                     "twitter": {
                         "oauth_token": "",
@@ -85,15 +94,18 @@ def vk_login(update, context):
             }
         }})
 
-    # session = vk_api.VkApi(token=ACCESS_TOKEN)
-    # api = session.get_api()
+    final_text = ''
 
-    # Users = api.users.get()
-    # print(Users[0]['first_name'])
+    try:
+        api = vk_api.VkApi(token=access_token).get_api()
+        final_text = f'Вы вошли как  {api.users.get()[0]["first_name"]} {api.users.get()[0]["last_name"]}.'
+    except vk_api.ApiError as err:
+        final_text = 'Ошибка авторизации'
 
-    # this attempt to send user a message throws exceptions for some reason :\
-
-
+    context.bot.send_message(
+        text=final_text,
+        chat_id=update.effective_chat.id
+    )
 
     return VK_DEFAULT
 
@@ -107,7 +119,6 @@ def vk_change_status(update, context):
         chat_id=update.effective_chat.id,
         text='Введите статус'
     )
-
 
     return VK_STATUS
 
@@ -127,9 +138,18 @@ def vk_post(update, context):
 
 def vk_logout(update, context):
 
+    chat_id = str(update.effective_chat.id)
+    collection.update_one({"chat_id": chat_id}, {"$set": {
+        "data": {
+            "vk": {
+                "oauth_token": ""
+            }
+        }
+    }})
+
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text='Произошёл выход'
+        text='Ваш токен удалён'
     )
 
     return VK_DEFAULT
@@ -190,4 +210,3 @@ def process_post(update, context):
     )
 
     return VK_DEFAULT
-

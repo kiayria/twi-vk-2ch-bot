@@ -13,6 +13,7 @@ from app.utils.states import (
     VK_DEFAULT,
     VK_POST,
     VK_STATUS,
+    VK_LOGIN,
     DVACH_DEFAULT,
     DVACH_POST,
     STATISTICS
@@ -32,6 +33,7 @@ from app.twitter.commands import (
 from app.vk.commands import (
     vk_menu,
     vk_login,
+    process_login_vk,
     vk_logout,
     vk_post,
     vk_change_status,
@@ -86,6 +88,10 @@ def get_conversation():
                 CallbackQueryHandler(vk_post, pattern='^vk_post$'),
                 CallbackQueryHandler(vk_change_status, pattern='^vk_change_status$'),
                 CallbackQueryHandler(vk_logout, pattern='^vk_logout$'),
+                CallbackQueryHandler(back, pattern='^return$'),
+            ],
+            VK_LOGIN: [
+                MessageHandler(Filters.text, process_login_vk),
                 CallbackQueryHandler(back, pattern='^return$'),
             ],
             VK_POST: [
