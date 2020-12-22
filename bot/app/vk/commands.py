@@ -2,7 +2,7 @@ import requests
 import vk_api
 
 from app.vk.utils.keyboards import VK_UNAUTHORIZED_MARKUP, VK_AUTHORIZED_MARKUP
-from app.vk.utils.utils import set_token, remove_token, get_token
+from app.vk.utils.utils import set_token, remove_token, get_token, stat_text
 from app.utils.states import VK_DEFAULT, VK_POST, VK_STATUS, VK_LOGIN
 from cfg import config
 
@@ -138,6 +138,7 @@ def process_post(update, context):
     try:
         answer_text = 'Запощено'
         vk_api.VkApi(token=access_token).get_api().wall.post(message=post_text)
+        stat_text(update.effective_chat.id, post_text)
     except vk_api.ApiError:
         answer_text = 'Ошибка аутентификации. Попробуйте перезайти'
 
