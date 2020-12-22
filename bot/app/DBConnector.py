@@ -77,3 +77,6 @@ class DBConnector:
                 'data.twitter.oauth_token_secret': '',
             }
         })
+
+    def get_user(self, chat_id):
+        return self.users.find_one({'chat_id': str(chat_id)})

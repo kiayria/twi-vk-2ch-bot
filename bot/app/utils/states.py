@@ -7,5 +7,6 @@
     VK_POST,
     VK_STATUS,
     DVACH_DEFAULT,
-    DVACH_POST
+    DVACH_POST,
+    STATISTICS
 ) = range(9)
