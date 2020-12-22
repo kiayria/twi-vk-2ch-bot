@@ -49,15 +49,16 @@ def dvach_news(update, context):
 
     txt = "Мы нашли эти посты:\n"
     for thread in top:
-        txt += f"{thread.num} говорит:\n {thread.post.comment}\n * * * * * * * * *\n\n\n"
-
+        if len(txt) < 3000 and len(thread.post.comment) < 1000:
+            txt += f"{thread.num} говорит:\n {thread.post.comment}\n * * * * * * * * *\n\n\n"
+    print(txt)
     context.bot.send_message(
         update.effective_chat.id,
         text=txt,
         reply_markup=DVACH_MARKUP
     )
 
-    return DVACH_DEFAULT    
+    return DVACH_DEFAULT
 
 
 def _clear_dvach_user_data(context):
@@ -65,7 +66,6 @@ def _clear_dvach_user_data(context):
     context.user_data.pop('dvach_board', None)
     context.user_data.pop('dvach_thread_id', None)
     context.user_data.pop('dvach_capcha_helper', None)
-
 
 
 def process_dvach_post(update, context):
@@ -96,7 +96,6 @@ def process_dvach_post(update, context):
             )
             return state
 
-
         api_session = ApiClient()
 
         helper = CaptchaHelper(api_session.session)
@@ -105,7 +104,7 @@ def process_dvach_post(update, context):
         context.user_data['dvach_capcha'] = captcha
         captcha_url = helper.get_captcha_img(captcha).url
 
-        answer_text = f'Пройдите капчу: {captcha_url}' 
+        answer_text = f'Пройдите капчу: {captcha_url}'
 
     elif 'dvach_capcha_helper' in context.user_data and 'dvach_capcha' in context.user_data:
         text = update.message.text
@@ -131,7 +130,7 @@ def process_dvach_post(update, context):
             _clear_dvach_user_data(context)
             state = DVACH_DEFAULT
     else:
-        answer_text = 'Произошло что-то непонятное! Попробуйте снова.'    
+        answer_text = 'Произошло что-то непонятное! Попробуйте снова.'
         _clear_dvach_user_data(context)
         state = DVACH_DEFAULT
 
