@@ -92,7 +92,6 @@ def twi_tweet(update, context):
 
 
 def process_tweet(update, context):
-
     if not context.user_data['twitter_logged_in']:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
