@@ -1,0 +1,6 @@
+from app.utils.keyboards import get_markup
+from .buttons import VK_UNAUTHORIZED_BUTTONS, VK_AUTHORIZED_BUTTONS
+
+
+VK_UNAUTHORIZED_MARKUP = get_markup(VK_UNAUTHORIZED_BUTTONS)
+VK_AUTHORIZED_MARKUP = get_markup(VK_AUTHORIZED_BUTTONS)

@@ -1,0 +1,6 @@
+dvach.api==1.0.0
+python-telegram-bot==13.1
+tweepy==3.9.0
+vk_api==11.9.1
+
+pymongo~=3.11.2
